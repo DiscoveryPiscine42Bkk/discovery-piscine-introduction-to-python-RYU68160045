@@ -6,29 +6,25 @@ def checkmate(board):
             print("Error")
             return
 
-        king = None
-        for i in range(n):
-            for j in range(len(lines[i])):
-                if lines[i][j] == 'K':
-                    king = (i, j)
-        if not king:
+        kings = [(i, j) for i in range(n) for j, ch in enumerate(lines[i]) if ch == 'K']
+        if len(kings) != 1:
             print("Error")
             return
-
-        xk, yk = king
+        xk, yk = kings[0]
 
         def in_bounds(x, y):
-            return 0 <= x < n and 0 <= y < len(lines[x])
+            return 0 <= x < n and 0 <= y < n
 
         for x in range(n):
-            for y in range(len(lines[x])):
+            for y in range(n):
                 p = lines[x][y]
                 if p == '.' or p == 'K':
                     continue
+
                 dx = xk - x
                 dy = yk - y
 
-                if p == 'P' and dx == 1 and abs(dy) == 1:
+                if p == 'P' and dx == -1 and abs(dy) == 1:
                     print("Success")
                     return
 
@@ -45,7 +41,7 @@ def checkmate(board):
                         cx += step_x
                         cy += step_y
 
-                if p == 'B' and abs(dx) == abs(dy):
+                if p == 'B' and abs(dx) == abs(dy) and dx != 0:
                     step_x = 1 if dx > 0 else -1
                     step_y = 1 if dy > 0 else -1
                     cx, cy = x + step_x, y + step_y
@@ -74,3 +70,4 @@ def checkmate(board):
         print("Fail to checkmate")
     except:
         print("Error")
+        
